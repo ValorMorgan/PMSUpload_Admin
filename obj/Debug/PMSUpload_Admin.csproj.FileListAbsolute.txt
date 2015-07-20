@@ -1,0 +1,15 @@
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\bin\Debug\PMSFinancialUpload.exe.config
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSFinancialUpload.exe
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSFinancialUpload.pdb
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSUpload_Admin.csprojResolveAssemblyReference.cache
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSUpload_Admin.EditWindow.resources
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSUpload_Admin.MainWindow.resources
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSUpload_Admin.Properties.Resources.resources
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSUpload_Admin.csproj.GenerateResource.Cache
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\bin\Debug\PMSFinancialUpload.exe
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\bin\Debug\PMSFinancialUpload.pdb
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\bin\Debug\PMSFinancialUpload.exe.manifest
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\bin\Debug\PMSFinancialUpload.application
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSFinancialUpload.TrustInfo.xml
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSFinancialUpload.exe.manifest
+C:\Users\jmorgan\Documents\[Projects]\PMSFinancialUpload\PMSFinancialUpload\obj\Debug\PMSFinancialUpload.application
