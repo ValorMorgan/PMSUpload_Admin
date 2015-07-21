@@ -30,7 +30,7 @@ namespace PMSUpload_Admin
             catch (Exception ex)
             {
                 MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
-                this.Close(); // Close the window.
+                this.Dispose(); // Close the window.
             }
         }
         #endregion
@@ -46,11 +46,13 @@ namespace PMSUpload_Admin
         /// <param name="e"></param>
         private void Cancel_Button_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Dispose();
         }
         
         /// <summary>
         /// Events that occur when the window first loads.
+        /// Checks against the header name exist and should be considered
+        /// when changes occur in the stored procedure.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -60,18 +62,25 @@ namespace PMSUpload_Admin
             this.CenterToParent();
 
             // Fill the fields with the proper data that was selected
-            MainWindowHelper mainWindowHelper = new MainWindowHelper();
-            List<string> headers = mainWindowHelper.GetHeaders();
+            List<string> headers = MainWindowHelper.GetHeaders();
 
+            // Clear out any existing controls
+            ClaimForm.Controls.Clear();
             foreach (string header in headers)
             {
-                if (headers.IndexOf(header) <= 0)
+                // Don't add the key column
+                if (header.Equals("PMSPrimaryKey"))
+                    continue;
+
+                // If the first header, don't create the extra row
+                if (ClaimForm.Controls.Count <= 0)
                 {
-                    ClaimForm.RowStyles[0].Height = 20F;
+                    ClaimForm.RowStyles[0].Height = 24F;
                 }
                 else
                     ClaimForm.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
 
+                // Declare and setup the form elements
                 #region HeaderLabel
                 Label headerLabel = new Label();
                 headerLabel.AutoSize = true;
@@ -81,25 +90,53 @@ namespace PMSUpload_Admin
                 headerLabel.TextAlign = ContentAlignment.MiddleRight;
                 headerLabel.TabIndex = 0;
                 headerLabel.Text = header + ":";
-                headerLabel.Name = "headerLabel" + (headers.IndexOf(header) + 1);
+                headerLabel.Name = "headerLabel" + ClaimForm.RowStyles.Count;
                 #endregion
                 #region TextBox
                 TextBox textBox = new TextBox();
                 textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top
                     | System.Windows.Forms.AnchorStyles.Left)
                     | System.Windows.Forms.AnchorStyles.Right)));
-                textBox.Name = "textBox" + (headers.IndexOf(header) + 1);
-                textBox.Size = new System.Drawing.Size(289, 20);
+                textBox.Name = "textBox" + ClaimForm.RowStyles.Count;
+                textBox.Size = new System.Drawing.Size(200, 20);
                 textBox.TabIndex = 0;
+                textBox.Text = MainWindowHelper.GetRowData(header);
+                // Set these columns to be greyed out
+                if (header.Equals("clmClaimNumber") || header.Equals("trxAmount"))
+                    textBox.Enabled = false;
+                #endregion
+                #region DropDown
+                ComboBox comboBox = new ComboBox();
+                if (header.Equals("trxAmount"))
+                {
+                    comboBox.Cursor = System.Windows.Forms.Cursors.Hand;
+                    comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+                    comboBox.FormattingEnabled = true;
+                    comboBox.MaxDropDownItems = 2;
+                    comboBox.MaxLength = 1;
+                    comboBox.Name = "comboBox" + ClaimForm.RowStyles.Count;
+                    comboBox.Size = new System.Drawing.Size(32, 21);
+                    comboBox.TabIndex = 0;
+                    comboBox.Items.Add("+");
+                    comboBox.Items.Add("-");
+                    // If there is a value, determine the sign and make seen value absolute
+                    if (!string.IsNullOrEmpty(textBox.Text))
+                    {
+                        comboBox.SelectedItem = (float.Parse(textBox.Text) < 0) ? "-" : "+";
+                        textBox.Text = Math.Abs(float.Parse(textBox.Text)).ToString();
+                    }
+                }
                 #endregion
 
-                ClaimForm.Controls.Add(textBox, 1, headers.IndexOf(header));
-                ClaimForm.Controls.Add(headerLabel, 0, headers.IndexOf(header));
+                // Add the elements to the display
+                // The dropbox only applies to trxAmount
+                ClaimForm.Controls.Add(headerLabel, 0, ClaimForm.RowStyles.Count - 1);
+                if (header.Equals("trxAmount"))
+                {
+                    ClaimForm.Controls.Add(comboBox, 1, ClaimForm.RowStyles.Count - 1);
+                }
+                ClaimForm.Controls.Add(textBox, 2, ClaimForm.RowStyles.Count - 1);
             }
-
-            // Restrict window size (pre-set width, total height)
-            Size windowSize = new Size(500, panel1.Height + 104);
-            this.MaximumSize = this.MinimumSize = this.Size = windowSize;
         }
         #endregion
     }

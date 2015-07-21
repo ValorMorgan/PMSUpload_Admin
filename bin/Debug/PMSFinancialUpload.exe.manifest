@@ -47,14 +47,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PMSFinancialUpload.exe" size="56832">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PMSFinancialUpload.exe" size="21504">
       <assemblyIdentity name="PMSFinancialUpload" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>A567uKQF7MO6EeySUUp7v8AdgsW1otszStyl0Bye7m0=</dsig:DigestValue>
+        <dsig:DigestValue>XGOU3mhCtjHM1iyEB6xuQA+A7VwGm2Rf9lj7UwN/ygo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -31,9 +31,9 @@
             this.RoundedBox1 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
             this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ClaimForm = new System.Windows.Forms.TableLayoutPanel();
             this.SaveClaim_Button = new System.Windows.Forms.Button();
             this.Cancel_Button = new System.Windows.Forms.Button();
-            this.ClaimForm = new System.Windows.Forms.TableLayoutPanel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,6 +76,23 @@
             this.panel1.Size = new System.Drawing.Size(460, 396);
             this.panel1.TabIndex = 1;
             // 
+            // ClaimForm
+            // 
+            this.ClaimForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ClaimForm.AutoScroll = true;
+            this.ClaimForm.ColumnCount = 3;
+            this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.ClaimForm.Location = new System.Drawing.Point(3, 3);
+            this.ClaimForm.Name = "ClaimForm";
+            this.ClaimForm.RowCount = 1;
+            this.ClaimForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 386F));
+            this.ClaimForm.Size = new System.Drawing.Size(450, 386);
+            this.ClaimForm.TabIndex = 0;
+            // 
             // SaveClaim_Button
             // 
             this.SaveClaim_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -85,7 +102,7 @@
             this.SaveClaim_Button.Name = "SaveClaim_Button";
             this.SaveClaim_Button.Size = new System.Drawing.Size(94, 26);
             this.SaveClaim_Button.TabIndex = 2;
-            this.SaveClaim_Button.Text = "Save Claim";
+            this.SaveClaim_Button.Text = "Save";
             this.SaveClaim_Button.UseVisualStyleBackColor = true;
             // 
             // Cancel_Button
@@ -102,21 +119,6 @@
             this.Cancel_Button.UseVisualStyleBackColor = true;
             this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
             // 
-            // ClaimForm
-            // 
-            this.ClaimForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClaimForm.ColumnCount = 2;
-            this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.63977F));
-            this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.36023F));
-            this.ClaimForm.Location = new System.Drawing.Point(3, 3);
-            this.ClaimForm.Name = "ClaimForm";
-            this.ClaimForm.RowCount = 1;
-            this.ClaimForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.ClaimForm.Size = new System.Drawing.Size(450, 386);
-            this.ClaimForm.TabIndex = 0;
-            // 
             // EditWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -129,6 +131,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.shapeContainer1);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(800, 500);
             this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "EditWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

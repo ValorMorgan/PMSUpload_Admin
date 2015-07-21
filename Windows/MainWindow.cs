@@ -54,6 +54,42 @@ namespace PMSUpload_Admin
 
             return returnList;
         }
+
+        /// <summary>
+        /// Gets the selected row's data from the column specified.
+        /// </summary>
+        /// <param name="header">The name of the column.</param>
+        /// <returns></returns>
+        public string GetRowData(string header)
+        {
+            return DataTable.SelectedRows[0].Cells[header].Value.ToString();
+        }
+
+        /// <summary>
+        /// Updates the DataTable by calling the procedure and getting the most up-to-date data.
+        /// </summary>
+        public void UpdateDataTable()
+        {
+            try
+            {
+                // Get the data and create a binding source
+                DataTable table = MainWindowHelper.GetProcedureDataTable();
+                BindingSource source = new BindingSource();
+
+                // Assign the data sources
+                source.DataSource = table;
+                DataTable.DataSource = source;
+
+                // Hide the key column
+                int indexOfKey = table.Columns.IndexOf("PMSPrimaryKey");
+                if (indexOfKey >= 0)
+                    DataTable.Columns[indexOfKey].Visible = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
+            }
+        }
         #endregion
 
         #region EVENTS
@@ -70,8 +106,8 @@ namespace PMSUpload_Admin
             {
                 // Sets the current user in the status bar
                 CurrentUser.Text = ApplicationHelper.GetCurrentUserName();
-                // This line of code loads data into the DataTable.
-                this.spPMSUploadAdmin_GetClaimTransactionsTableAdapter.Fill(this.getData.spPMSUploadAdmin_GetClaimTransactions);
+
+                UpdateDataTable();
 
                 // Set the association between the MainWindow and the helper.
                 Helpers.MainWindowHelper.mainWindow = this;
@@ -97,7 +133,8 @@ namespace PMSUpload_Admin
             {
                 if (editWindow.IsDisposed)
                     editWindow = new EditWindow();
-                editWindow.Show();
+                editWindow.ShowDialog();
+                editWindow.Dispose();
             }
         }
 
@@ -117,8 +154,19 @@ namespace PMSUpload_Admin
             {
                 if (editWindow.IsDisposed)
                     editWindow = new EditWindow();
-                editWindow.Show();
+                editWindow.ShowDialog();
+                editWindow.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Called when the binding source is changed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void spPMSUploadAdminGetClaimTransactionsBindingSource_CurrentChanged(object sender, EventArgs e)
+        {
+            DataTable.Refresh();
         }
         #endregion
     }

@@ -72,11 +72,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetData.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GetData.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Helpers\ApplicationHelper.cs" />
     <Compile Include="Helpers\MainWindowHelper.cs" />
     <Compile Include="Windows\EditWindow.cs">
@@ -110,17 +105,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="GetData.xsc">
-      <DependentUpon>GetData.xsd</DependentUpon>
-    </None>
-    <None Include="GetData.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>GetData.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="GetData.xss">
-      <DependentUpon>GetData.xsd</DependentUpon>
-    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
