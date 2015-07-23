@@ -33,10 +33,13 @@
             this.RoundedBox1 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
             this.Select_Button = new System.Windows.Forms.Button();
             this.Search_Panel = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.searchButton = new System.Windows.Forms.Button();
             this.searchBox = new System.Windows.Forms.TextBox();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.CurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
+            this.recordCount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.refreshButton = new System.Windows.Forms.Button();
+            this.worker_SearchBox = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.Search_Panel.SuspendLayout();
             this.StatusBar.SuspendLayout();
@@ -111,38 +114,46 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Search_Panel.BackColor = System.Drawing.SystemColors.Control;
             this.Search_Panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Search_Panel.Controls.Add(this.button1);
+            this.Search_Panel.Controls.Add(this.searchButton);
             this.Search_Panel.Controls.Add(this.searchBox);
             this.Search_Panel.Location = new System.Drawing.Point(12, 12);
             this.Search_Panel.Name = "Search_Panel";
             this.Search_Panel.Size = new System.Drawing.Size(760, 34);
             this.Search_Panel.TabIndex = 5;
             // 
-            // button1
+            // searchButton
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(3, 4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Search";
-            this.button1.UseVisualStyleBackColor = true;
+            this.searchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchButton.Location = new System.Drawing.Point(679, 4);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(75, 23);
+            this.searchButton.TabIndex = 1;
+            this.searchButton.Text = "Search";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // searchBox
             // 
             this.searchBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "(Processing...)"});
+            this.searchBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.searchBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.searchBox.HideSelection = false;
-            this.searchBox.Location = new System.Drawing.Point(84, 6);
+            this.searchBox.Location = new System.Drawing.Point(3, 6);
             this.searchBox.Name = "searchBox";
             this.searchBox.Size = new System.Drawing.Size(671, 20);
             this.searchBox.TabIndex = 0;
             this.searchBox.WordWrap = false;
+            this.searchBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchBox_EnterKey);
             // 
             // StatusBar
             // 
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CurrentUser});
+            this.CurrentUser,
+            this.recordCount});
             this.StatusBar.Location = new System.Drawing.Point(0, 540);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.Size = new System.Drawing.Size(784, 22);
@@ -152,9 +163,38 @@
             // CurrentUser
             // 
             this.CurrentUser.BackColor = System.Drawing.SystemColors.Control;
+            this.CurrentUser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.CurrentUser.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.CurrentUser.Name = "CurrentUser";
             this.CurrentUser.Size = new System.Drawing.Size(80, 17);
             this.CurrentUser.Text = "MFBNTDOM\\";
+            this.CurrentUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // recordCount
+            // 
+            this.recordCount.BackColor = System.Drawing.SystemColors.Control;
+            this.recordCount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.recordCount.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.recordCount.Name = "recordCount";
+            this.recordCount.Size = new System.Drawing.Size(101, 17);
+            this.recordCount.Text = "|  Records Found: ";
+            this.recordCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.refreshButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.refreshButton.Location = new System.Drawing.Point(674, 509);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(93, 26);
+            this.refreshButton.TabIndex = 7;
+            this.refreshButton.Text = "Refresh";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
+            // worker_SearchBox
+            // 
+            this.worker_SearchBox.DoWork += new System.ComponentModel.DoWorkEventHandler(this.worker_SearchBox_DoWork);
             // 
             // MainWindow
             // 
@@ -163,6 +203,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(784, 562);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.Search_Panel);
             this.Controls.Add(this.Select_Button);
@@ -208,7 +249,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn polUnitLocationNumberDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn rsvLocationNumberDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn rsvInlandMarineUnitDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.ToolStripStatusLabel recordCount;
+        private System.ComponentModel.BackgroundWorker worker_SearchBox;
     }
 }
 

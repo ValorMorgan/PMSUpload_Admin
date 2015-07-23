@@ -104,6 +104,7 @@
             this.SaveClaim_Button.TabIndex = 2;
             this.SaveClaim_Button.Text = "Save";
             this.SaveClaim_Button.UseVisualStyleBackColor = true;
+            this.SaveClaim_Button.Click += new System.EventHandler(this.SaveClaim_Button_Click);
             // 
             // Cancel_Button
             // 
@@ -135,7 +136,7 @@
             this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "EditWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Claim";
+            this.Text = "Claim - ";
             this.Load += new System.EventHandler(this.EditWindow_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -33,41 +33,18 @@ namespace PMSUpload_Admin.Helpers
         }
 
         /// <summary>
-        /// Calls the stored procedure and returns the resultset
-        /// as a DataTable.
-        /// </summary>
-        /// <returns></returns>
-        public static DataTable GetProcedureDataTable()
-        {
-            using (SqlConnection connection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings[1].ConnectionString))
-            {
-                try
-                {
-                    SqlCommand command = new SqlCommand("spPMSUploadAdmin_GetClaimTransactions", connection);
-                    SqlDataAdapter adapter = new SqlDataAdapter();
-                    adapter.SelectCommand = command;
-
-                    DataTable returnTable = new DataTable();
-                    returnTable.Locale = System.Globalization.CultureInfo.InvariantCulture;
-                    adapter.Fill(returnTable);
-
-                    return returnTable;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets the selected row's data from the column specified.
         /// </summary>
         /// <param name="header">The name of the column.</param>
         /// <returns></returns>
-        public static string GetRowData(string header)
+        public static string GetCellData(string header)
         {
-            return mainWindow.GetRowData(header);
+            return mainWindow.GetCellData(header);
+        }
+
+        public static bool IsNewData(List<string> dataList)
+        {
+            return mainWindow.IsNewData(dataList);
         }
         #endregion
     }

@@ -28,7 +28,9 @@ namespace PMSUpload_Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
+                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message)
+                    + Environment.NewLine + "The server may not be responding or you may not have the rights to run this application."
+                    + Environment.NewLine + ex.StackTrace);
             }
         }
     }
