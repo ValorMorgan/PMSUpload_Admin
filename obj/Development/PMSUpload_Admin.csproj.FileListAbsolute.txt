@@ -1,0 +1,16 @@
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\bin\Development\PMSUpload_Admin.exe.config
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\bin\Debug\PMSUpload_Admin.exe.config
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\bin\Debug\PMSUpload_Admin.exe.manifest
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\bin\Debug\PMSUpload_Admin.application
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\bin\Debug\PMSUpload_Admin.exe
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\bin\Debug\PMSUpload_Admin.pdb
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.csprojResolveAssemblyReference.cache
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.EditWindow.resources
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.MainWindow.resources
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.Properties.Resources.resources
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.csproj.GenerateResource.Cache
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.TrustInfo.xml
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.exe.manifest
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.application
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.exe
+C:\Users\jmorgan\Documents\[Projects]\PMSUpload_Admin\Source\obj\Development\PMSUpload_Admin.pdb

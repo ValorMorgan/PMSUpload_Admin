@@ -37,7 +37,9 @@ namespace PMSUpload_Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
+                string errorMsg = ((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace;
+                MessageBox.Show(errorMsg, "Error");
+                Console.WriteLine(errorMsg);
                 this.Dispose(); // Close the window and end the program.
             }
         }
@@ -56,13 +58,12 @@ namespace PMSUpload_Admin
             bool isNew = false;
             for (int i = 0; i < DataTable.SelectedCells.Count && i < dataList.Count; i++)
             {
-                if (!dataList[i].Equals(GetCellData(i)))
+                if (!dataList[i + 1].Equals(GetCellData(i)))
                 {
                     isNew = true;
                     break;
                 }
             }
-
             return isNew;
         }
 
@@ -88,36 +89,51 @@ namespace PMSUpload_Admin
 
         /// <summary>
         /// Gets the selected row's data from the column specified.
+        /// If the column does not exist, returns null.
         /// </summary>
         /// <param name="header">The name of the column.</param>
         /// <returns></returns>
         public string GetCellData(string header)
         {
+            if (!DataTable.Columns.Contains(header))
+                return null;
+
             return DataTable.SelectedRows[0].Cells[header].Value.ToString().Trim();
         }
         /// <summary>
         /// Gets the selected row's data from the column specified.
+        /// If the column does not exist, returns null.
         /// </summary>
         /// <param name="index">The known index of the cell (the column number).</param>
         /// <returns></returns>
         public string GetCellData(int index)
         {
+            if (DataTable.Columns.Count <= index)
+                return null;
+
             return DataTable.SelectedCells[index].Value.ToString().Trim();
         }
 
         /// <summary>
         /// Updates the DataTable by calling the procedure and getting the most up-to-date data.
+        /// Commented out code that can be used if DataTable
+        /// is filled before a search occurs.
         /// </summary>
-        public void UpdateDataTable()
+        /// <param name="claim">The claim to get data on from the stored procedure. This is usually the search text.</param>
+        public void UpdateDataTable(string claim)
         {
-            try
-            {
+            // If the searchBox has nothing in it or is not the length of a claim, no data can be found.
+            if (string.IsNullOrWhiteSpace(claim) || claim.Length < 15)
+                throw new Exception("Claim was not found.  Did you type the claim number in correctly?");
+
+            //try
+            //{
                 // Get the data and create a binding source
-                masterTable = ApplicationHelper.GetProcedureDataTable();
+                masterTable = ApplicationHelper.GetProcedureDataTable(claim);
                 BindingSource source = new BindingSource();
 
-                // Check for repopulation of the auto-complete cache
-                bool newRows = DataTable.Rows.Count != masterTable.Rows.Count;
+                //// Check for repopulation of the auto-complete cache
+                //bool newRows = DataTable.Rows.Count != masterTable.Rows.Count;
 
                 // Assign the data sources
                 source.DataSource = masterTable;
@@ -125,34 +141,40 @@ namespace PMSUpload_Admin
 
                 // Update the record count in the status bar
                 recordCount.Text = "|  Claims Found: " + masterTable.Rows.Count;
+                Console.Write("Updated Master Table: " + masterTable.Rows.Count + " claims");
 
                 // Hide the key column
                 int indexOfKey = masterTable.Columns.IndexOf("PMSPrimaryKey");
                 if (indexOfKey >= 0)
-                    DataTable.Columns[indexOfKey].Visible = false;
-
-                // Get the index for the search parameter (return if not found or if nothing new to add)
-                int indexOfSearch = masterTable.Columns.IndexOf("clmClaimNumber");
-                if (indexOfSearch <= 0 || !newRows)
-                    return;
-
-                // Get a list of the claims in the dataTable (duplicates included)
-                List<string> claims = new List<string>() { };
-                foreach (DataGridViewRow row in DataTable.Rows)
                 {
-                    claims.Add(row.Cells[indexOfSearch].Value.ToString());
+                    DataTable.Columns[indexOfKey].Visible = false;
+                    Console.WriteLine("  Primary Key found.  Hid column.");
                 }
+                else
+                    Console.WriteLine("  Primary Key was not found.");
 
-                // Setup the auto-complete selection for the searchBox
-                worker_SearchBox.RunWorkerAsync(claims);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
-                // If the window is not loaded, end the program
-                if (!this.IsAccessible)
-                    this.Dispose();
-            }
+                //// Get the index for the search parameter (return if not found or if nothing new to add)
+                //int indexOfSearch = masterTable.Columns.IndexOf("clmClaimNumber");
+                //if (indexOfSearch <= 0 || !newRows)
+                //    return;
+
+                //// Get a list of the claims in the dataTable (duplicates included)
+                //List<string> claims = new List<string>() { };
+                //foreach (DataGridViewRow row in DataTable.Rows)
+                //{
+                //    claims.Add(row.Cells[indexOfSearch].Value.ToString());
+                //}
+
+                //// Setup the auto-complete selection for the searchBox
+                //worker_SearchBox.RunWorkerAsync(claims);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
+            //    // If the window is not loaded, end the program
+            //    if (!this.IsAccessible)
+            //        this.Dispose();
+            //}
         }
 
         /// <summary>
@@ -161,11 +183,12 @@ namespace PMSUpload_Admin
         /// </summary>
         public void RefreshMainWindow()
         {
+            int selectedRowIndex = DataTable.Rows.IndexOf(DataTable.SelectedRows[0]);
             try
             {
+                Console.WriteLine("Refreshing the MainWindow.");
                 this.Enabled = false;
-                searchBox.Text = "";
-                UpdateDataTable();
+                UpdateDataTable(DataTable.Rows[0].Cells["clmClaimNumber"].Value.ToString());
             }
             catch (Exception ex)
             {
@@ -174,14 +197,17 @@ namespace PMSUpload_Admin
             finally
             {
                 this.Enabled = true;
+
+                // Re-select the currect active claim
+                DataTable.Rows[selectedRowIndex].Selected = true;
             }
         }
         #endregion
 
         #region EVENTS
         /// <summary>
-        /// Called when the window first loads.  Handles populating
-        /// the DataTable and setting the logged in user in the StatusBar.
+        /// Called when the window first loads.  Handles setting
+        /// the logged in user in the StatusBar.
         /// Will also catch errors with the provided data connection.
         /// </summary>
         /// <param name="sender"></param>
@@ -190,17 +216,21 @@ namespace PMSUpload_Admin
         {
             try
             {
+                Console.Write("MainWindow loading...");
                 // Sets the current user in the status bar
                 CurrentUser.Text = ApplicationHelper.GetCurrentUserName();
 
-                UpdateDataTable();
-
+                Console.Write("...");
                 // Set the association between the MainWindow and the helper.
                 Helpers.MainWindowHelper.mainWindow = this;
+                Console.WriteLine("...Done");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
+                Console.WriteLine("...Failed");
+                string errorMsg = ((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace;
+                MessageBox.Show(errorMsg, "Error");
+                Console.WriteLine(errorMsg);
                 this.Dispose(); // Close the window and end the program.
             }
         }
@@ -217,10 +247,26 @@ namespace PMSUpload_Admin
                 editWindow.Focus();
             else
             {
-                if (editWindow.IsDisposed)
-                    editWindow = new EditWindow();
-                editWindow.ShowDialog();
-                editWindow.Dispose();
+                try
+                {
+                    Console.Write("Opening claim " + GetCellData("clmClaimNumber") + "...");
+                    if (editWindow.IsDisposed)
+                        editWindow = new EditWindow();
+                    // Update data (if 2 working on same record, data can go stale)
+                    RefreshMainWindow();
+                    Console.WriteLine("...Done");
+                    editWindow.ShowDialog();
+                    Console.Write("Closing claim " + GetCellData("clmClaimNumber") + "...");
+                    editWindow.Dispose();
+                    Console.WriteLine("...Done");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("...Failed");
+                    string errorMsg = ((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace;
+                    MessageBox.Show(errorMsg, "Error");
+                    Console.WriteLine(errorMsg);
+                }
             }
         }
 
@@ -238,15 +284,33 @@ namespace PMSUpload_Admin
                 editWindow.Focus();
             else
             {
-                if (editWindow.IsDisposed)
-                    editWindow = new EditWindow();
-                editWindow.ShowDialog();
-                editWindow.Dispose();
+                try
+                {
+                    Console.Write("Opening claim " + GetCellData("clmClaimNumber") + "...");
+                    if (editWindow.IsDisposed)
+                        editWindow = new EditWindow();
+                    // Update data (if 2 working on same record, data can go stale)
+                    RefreshMainWindow();
+                    Console.WriteLine("...Done");
+                    editWindow.ShowDialog();
+                    Console.Write("Closing claim " + GetCellData("clmClaimNumber") + "...");
+                    editWindow.Dispose();
+                    Console.WriteLine("...Done");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("...Failed");
+                    string errorMsg = ((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace;
+                    MessageBox.Show(errorMsg, "Error");
+                    Console.WriteLine(errorMsg);
+                }
             }
         }
 
         /// <summary>
         /// Handles all of the search operations.
+        /// Commented out code that can be used if DataTable
+        /// is filled before a search occurs.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -254,60 +318,68 @@ namespace PMSUpload_Admin
         {
             try
             {
-                bool doSearch = true;
-                DataTable searchTable;
+                // Get the data in the DataTable
+                UpdateDataTable(searchBox.Text);
 
-                // Check if the searchBox is empty and a search was never performed
-                if (string.IsNullOrEmpty(searchBox.Text) && DataTable.Rows.Count >= masterTable.Rows.Count)
-                    return;
-                else if (string.IsNullOrEmpty(searchBox.Text))
-                    doSearch = false;
+                refreshButton.Enabled = true;
+
+                //bool doSearch = true;
+                //DataTable searchTable;
+
+                //// Check if the searchBox is empty and a search was never performed
+                //if (string.IsNullOrEmpty(searchBox.Text)) //&& DataTable.Rows.Count >= masterTable.Rows.Count)
+                //    return;
+                //else if (string.IsNullOrEmpty(searchBox.Text))
+                //    doSearch = false;
                 
-                // Do the search if there is something to search for
-                if (doSearch)
-                {
-                    // Setup the new table for display
-                    searchTable = new DataTable();
-                    foreach (DataColumn column in masterTable.Columns)
-                    {
-                        searchTable.Columns.Add(column.ColumnName);
-                    }
+                //// Do the search if there is something to search for
+                //if (doSearch)
+                //{
 
-                    // Find each row that has the claim number searched for
-                    foreach (DataRow row in masterTable.Rows)
-                    {
-                        object[] rowCells = row.ItemArray;
-                        foreach (object cell in rowCells)
-                        {
-                            if (cell.ToString().Contains(searchBox.Text))
-                            {
-                                searchTable.Rows.Add(rowCells);
-                                break;
-                            }
-                        }
-                    }
+                    //// Setup the new table for display
+                    //searchTable = new DataTable();
+                    //foreach (DataColumn column in masterTable.Columns)
+                    //{
+                    //    searchTable.Columns.Add(column.ColumnName);
+                    //}
 
-                    // If nothing was found
-                    if (searchTable.Rows.Count <= 0)
-                        throw new Exception("Claim was not found.  Did you type the claim number in correctly?");
-                }
-                else // Otherwise assume to reset table
-                    searchTable = masterTable;
+                    //// Find each row that has the claim number searched for
+                    //foreach (DataRow row in masterTable.Rows)
+                    //{
+                    //    object[] rowCells = row.ItemArray;
+                    //    foreach (object cell in rowCells)
+                    //    {
+                    //        if (cell.ToString().Contains(searchBox.Text))
+                    //        {
+                    //            searchTable.Rows.Add(rowCells);
+                    //            break;
+                    //        }
+                    //    }
+                    //}
 
-                BindingSource source = new BindingSource();
+                    //// If nothing was found
+                    //if (searchTable.Rows.Count <= 0)
+                    //    throw new Exception("Claim was not found.  Did you type the claim number in correctly?");
+                //}
+                //else // Otherwise assume to reset table
+                //    searchTable = masterTable;
 
-                // Assign the data sources
-                source.DataSource = searchTable;
-                DataTable.DataSource = source;
+                //BindingSource source = new BindingSource();
 
-                // Hide the key column
-                int indexOfKey = searchTable.Columns.IndexOf("PMSPrimaryKey");
-                if (indexOfKey >= 0)
-                    DataTable.Columns[indexOfKey].Visible = false;
+                //// Assign the data sources
+                //source.DataSource = searchTable;
+                //DataTable.DataSource = source;
+
+                //// Hide the key column
+                //int indexOfKey = searchTable.Columns.IndexOf("PMSPrimaryKey");
+                //if (indexOfKey >= 0)
+                //    DataTable.Columns[indexOfKey].Visible = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message));
+                string errorMsg = ((ex.InnerException == null) ? ex.Message : ex.InnerException.Message);
+                MessageBox.Show(errorMsg, "Error");
+                Console.WriteLine(errorMsg);
             }
         }
         
@@ -319,7 +391,8 @@ namespace PMSUpload_Admin
         /// <param name="e"></param>
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            RefreshMainWindow();
+            if (!string.IsNullOrWhiteSpace(searchBox.Text) && searchBox.Text.Length >= 15)
+                RefreshMainWindow();
         }
 
         /// <summary>
@@ -327,11 +400,41 @@ namespace PMSUpload_Admin
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void searchBox_EnterKey(object sender, KeyEventArgs e)
+        private void searchBox_KeyPress(object sender, KeyEventArgs e)
         {
-            // Checks if the "enter" key is pressed (KeyValue of 13)
-            if (e.KeyValue == 13)
+            // Checks if the "enter" key is pressed
+            if (e.KeyCode == Keys.Enter)
+            {
+                searchTimer.Stop();
                 this.searchButton_Click(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// Handles calling the background worker to fill the auto-complete while
+        /// the user types.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            if (worker_SearchBox.IsBusy || searchBox.Text.Length < 2 || searchBox.Text.Length >= 15)
+            {
+                searchTimer.Stop();
+            }
+            else
+                searchTimer.Start();
+        }
+
+        /// <summary>
+        /// Occurs if a second passes while the user is typing in the searchBox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void searchTimer_Tick(object sender, EventArgs e)
+        {
+            searchTimer.Stop();
+            worker_SearchBox.RunWorkerAsync(searchBox.Text);
         }
         #endregion
 
@@ -346,33 +449,39 @@ namespace PMSUpload_Admin
         {
             try
             {
+                Console.WriteLine("SearchTimer ticked.  Performing search...");
+                Console.Write("...");
                 // Setup the list with unique claims
-                AutoCompleteStringCollection autoCompleteList = new AutoCompleteStringCollection();
-                foreach (string claim in (List<string>)e.Argument)
-                {
-                    if (!searchBox.AutoCompleteCustomSource.Contains(claim))
-                        autoCompleteList.Add(claim);
-                }
+                List<string> autoCompleteList = new List<string>() { };
+                foreach (string item in ApplicationHelper.GetAutoCompleteList(e.Argument.ToString()))
+                    autoCompleteList.Add(item);
+                Console.Write("...");
 
                 // Fill the list in the searchBox
                 // An invoke check exists to work with the main thread
-                if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(delegate
                 {
-                    this.Invoke(new MethodInvoker(delegate
-                    {
-                        searchBox.AutoCompleteCustomSource.Clear();
-                        searchBox.AutoCompleteCustomSource = autoCompleteList;
-                    }));
-                }
-                else
-                {
-                    searchBox.AutoCompleteCustomSource.Clear();
-                    searchBox.AutoCompleteCustomSource = autoCompleteList;
-                }
+                    searchBox.Items.Clear();
+                    searchBox.Items.AddRange(autoCompleteList.ToArray());
+                }));
+                Console.Write("...");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace);
+                string errorMsg = ((ex.InnerException == null) ? ex.Message : ex.InnerException.Message) + Environment.NewLine + ex.StackTrace;
+                MessageBox.Show(errorMsg, "Background Thread Error");
+                Console.WriteLine(errorMsg);
+            }
+            finally
+            {
+                // Display the dropdown so the user can see their options
+                this.Invoke(new MethodInvoker(delegate
+                {
+                    searchBox.Focus();
+                    if (searchBox.Items.Count > 0)
+                        searchBox.DroppedDown = true;
+                }));
+                Console.WriteLine("...Done");
             }
         }
         #endregion

@@ -28,18 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.DataTable = new System.Windows.Forms.DataGridView();
             this.shapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.RoundedBox1 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
             this.Select_Button = new System.Windows.Forms.Button();
             this.Search_Panel = new System.Windows.Forms.Panel();
+            this.searchBox = new System.Windows.Forms.ComboBox();
             this.searchButton = new System.Windows.Forms.Button();
-            this.searchBox = new System.Windows.Forms.TextBox();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
             this.CurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.recordCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.refreshButton = new System.Windows.Forms.Button();
             this.worker_SearchBox = new System.ComponentModel.BackgroundWorker();
+            this.searchTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).BeginInit();
             this.Search_Panel.SuspendLayout();
             this.StatusBar.SuspendLayout();
@@ -114,12 +116,27 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Search_Panel.BackColor = System.Drawing.SystemColors.Control;
             this.Search_Panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Search_Panel.Controls.Add(this.searchButton);
             this.Search_Panel.Controls.Add(this.searchBox);
+            this.Search_Panel.Controls.Add(this.searchButton);
             this.Search_Panel.Location = new System.Drawing.Point(12, 12);
             this.Search_Panel.Name = "Search_Panel";
             this.Search_Panel.Size = new System.Drawing.Size(760, 34);
             this.Search_Panel.TabIndex = 5;
+            // 
+            // searchBox
+            // 
+            this.searchBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchBox.FormattingEnabled = true;
+            this.searchBox.Items.AddRange(new object[] {
+            "Please start typing..."});
+            this.searchBox.Location = new System.Drawing.Point(3, 5);
+            this.searchBox.MaxLength = 15;
+            this.searchBox.Name = "searchBox";
+            this.searchBox.Size = new System.Drawing.Size(671, 21);
+            this.searchBox.TabIndex = 8;
+            this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
+            this.searchBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchBox_KeyPress);
             // 
             // searchButton
             // 
@@ -132,22 +149,6 @@
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = true;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
-            // 
-            // searchBox
-            // 
-            this.searchBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchBox.AutoCompleteCustomSource.AddRange(new string[] {
-            "(Processing...)"});
-            this.searchBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.searchBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.searchBox.HideSelection = false;
-            this.searchBox.Location = new System.Drawing.Point(3, 6);
-            this.searchBox.Name = "searchBox";
-            this.searchBox.Size = new System.Drawing.Size(671, 20);
-            this.searchBox.TabIndex = 0;
-            this.searchBox.WordWrap = false;
-            this.searchBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchBox_EnterKey);
             // 
             // StatusBar
             // 
@@ -176,13 +177,13 @@
             this.recordCount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.recordCount.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.recordCount.Name = "recordCount";
-            this.recordCount.Size = new System.Drawing.Size(101, 17);
-            this.recordCount.Text = "|  Records Found: ";
+            this.recordCount.Size = new System.Drawing.Size(0, 17);
             this.recordCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // refreshButton
             // 
             this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.refreshButton.Enabled = false;
             this.refreshButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.refreshButton.Location = new System.Drawing.Point(674, 509);
             this.refreshButton.Name = "refreshButton";
@@ -195,6 +196,11 @@
             // worker_SearchBox
             // 
             this.worker_SearchBox.DoWork += new System.ComponentModel.DoWorkEventHandler(this.worker_SearchBox_DoWork);
+            // 
+            // searchTimer
+            // 
+            this.searchTimer.Interval = 1000;
+            this.searchTimer.Tick += new System.EventHandler(this.searchTimer_Tick);
             // 
             // MainWindow
             // 
@@ -216,7 +222,6 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataTable)).EndInit();
             this.Search_Panel.ResumeLayout(false);
-            this.Search_Panel.PerformLayout();
             this.StatusBar.ResumeLayout(false);
             this.StatusBar.PerformLayout();
             this.ResumeLayout(false);
@@ -231,7 +236,6 @@
         private Microsoft.VisualBasic.PowerPacks.RectangleShape RoundedBox1;
         private System.Windows.Forms.Button Select_Button;
         private System.Windows.Forms.Panel Search_Panel;
-        private System.Windows.Forms.TextBox searchBox;
         private System.Windows.Forms.StatusStrip StatusBar;
         private System.Windows.Forms.ToolStripStatusLabel CurrentUser;
         private System.Windows.Forms.DataGridViewTextBoxColumn tcdCodeDataGridViewTextBoxColumn;
@@ -253,6 +257,8 @@
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.ToolStripStatusLabel recordCount;
         private System.ComponentModel.BackgroundWorker worker_SearchBox;
+        private System.Windows.Forms.ComboBox searchBox;
+        private System.Windows.Forms.Timer searchTimer;
     }
 }
 

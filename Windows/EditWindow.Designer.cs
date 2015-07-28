@@ -50,7 +50,7 @@
             this.RoundedBox1.FillStyle = Microsoft.VisualBasic.PowerPacks.FillStyle.Solid;
             this.RoundedBox1.Location = new System.Drawing.Point(6, 5);
             this.RoundedBox1.Name = "RoundedBox1";
-            this.RoundedBox1.Size = new System.Drawing.Size(472, 473);
+            this.RoundedBox1.Size = new System.Drawing.Size(572, 473);
             // 
             // shapeContainer1
             // 
@@ -59,7 +59,7 @@
             this.shapeContainer1.Name = "shapeContainer1";
             this.shapeContainer1.Shapes.AddRange(new Microsoft.VisualBasic.PowerPacks.Shape[] {
             this.RoundedBox1});
-            this.shapeContainer1.Size = new System.Drawing.Size(484, 462);
+            this.shapeContainer1.Size = new System.Drawing.Size(584, 462);
             this.shapeContainer1.TabIndex = 0;
             this.shapeContainer1.TabStop = false;
             // 
@@ -73,7 +73,7 @@
             this.panel1.Controls.Add(this.ClaimForm);
             this.panel1.Location = new System.Drawing.Point(12, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(460, 396);
+            this.panel1.Size = new System.Drawing.Size(560, 396);
             this.panel1.TabIndex = 1;
             // 
             // ClaimForm
@@ -81,7 +81,6 @@
             this.ClaimForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClaimForm.AutoScroll = true;
             this.ClaimForm.ColumnCount = 3;
             this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.ClaimForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -90,7 +89,7 @@
             this.ClaimForm.Name = "ClaimForm";
             this.ClaimForm.RowCount = 1;
             this.ClaimForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 386F));
-            this.ClaimForm.Size = new System.Drawing.Size(450, 386);
+            this.ClaimForm.Size = new System.Drawing.Size(530, 386);
             this.ClaimForm.TabIndex = 0;
             // 
             // SaveClaim_Button
@@ -98,7 +97,7 @@
             this.SaveClaim_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.SaveClaim_Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.SaveClaim_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveClaim_Button.Location = new System.Drawing.Point(378, 432);
+            this.SaveClaim_Button.Location = new System.Drawing.Point(478, 432);
             this.SaveClaim_Button.Name = "SaveClaim_Button";
             this.SaveClaim_Button.Size = new System.Drawing.Size(94, 26);
             this.SaveClaim_Button.TabIndex = 2;
@@ -126,14 +125,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.CancelButton = this.Cancel_Button;
-            this.ClientSize = new System.Drawing.Size(484, 462);
+            this.ClientSize = new System.Drawing.Size(584, 462);
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.SaveClaim_Button);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.shapeContainer1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(800, 500);
-            this.MinimumSize = new System.Drawing.Size(500, 500);
+            this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "EditWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Claim - ";
