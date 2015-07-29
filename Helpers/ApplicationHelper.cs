@@ -110,10 +110,10 @@ namespace PMSUpload_Admin.Helpers
                     else
                     {
                         // Check if there are characters or symbols and add the ''
-                        if (param.Any(x => char.IsLetter(x)) || param.Any(x => char.IsSymbol(x)) || param.Any(x => char.IsPunctuation(x)))
+                        //if (param.Any(x => char.IsLetter(x)) || param.Any(x => char.IsSymbol(x)) || param.Any(x => char.IsPunctuation(x)))
                             commandString += (parameters.IndexOf(param) != 0) ? (", '" + param + "'") : (" '" + param + "'");
-                        else
-                            commandString += (parameters.IndexOf(param) != 0) ? (", " + param) : (" " + param);
+                        //else
+                        //    commandString += (parameters.IndexOf(param) != 0) ? (", " + param) : (" " + param);
                     }
                 }
 
@@ -124,8 +124,7 @@ namespace PMSUpload_Admin.Helpers
                 command.ExecuteNonQuery();
                 Console.WriteLine("...Done");
 
-                // Refresh the MainWindow's master table and the EditWindow if it is open
-                // Refresh the EditWindow for getting the new PrimaryKey
+                // Refresh the MainWindow's master table
                 MainWindowHelper.mainWindow.RefreshMainWindow();
             }
             catch (Exception ex)

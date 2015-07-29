@@ -252,8 +252,6 @@ namespace PMSUpload_Admin
                     Console.Write("Opening claim " + GetCellData("clmClaimNumber") + "...");
                     if (editWindow.IsDisposed)
                         editWindow = new EditWindow();
-                    // Update data (if 2 working on same record, data can go stale)
-                    RefreshMainWindow();
                     Console.WriteLine("...Done");
                     editWindow.ShowDialog();
                     Console.Write("Closing claim " + GetCellData("clmClaimNumber") + "...");
@@ -289,8 +287,6 @@ namespace PMSUpload_Admin
                     Console.Write("Opening claim " + GetCellData("clmClaimNumber") + "...");
                     if (editWindow.IsDisposed)
                         editWindow = new EditWindow();
-                    // Update data (if 2 working on same record, data can go stale)
-                    RefreshMainWindow();
                     Console.WriteLine("...Done");
                     editWindow.ShowDialog();
                     Console.Write("Closing claim " + GetCellData("clmClaimNumber") + "...");
@@ -405,8 +401,12 @@ namespace PMSUpload_Admin
             // Checks if the "enter" key is pressed
             if (e.KeyCode == Keys.Enter)
             {
-                searchTimer.Stop();
-                this.searchButton_Click(sender, e);
+                if (searchBox.Text.Length < 15)
+                {
+                    this.searchTimer_Tick(sender, e);
+                }
+                else
+                    this.searchButton_Click(sender, e);
             }
         }
 
@@ -434,7 +434,8 @@ namespace PMSUpload_Admin
         private void searchTimer_Tick(object sender, EventArgs e)
         {
             searchTimer.Stop();
-            worker_SearchBox.RunWorkerAsync(searchBox.Text);
+            if (!worker_SearchBox.IsBusy)
+                worker_SearchBox.RunWorkerAsync(searchBox.Text);
         }
         #endregion
 

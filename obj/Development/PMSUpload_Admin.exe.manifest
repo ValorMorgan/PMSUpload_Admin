@@ -47,14 +47,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PMSUpload_Admin.exe" size="32768">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PMSUpload_Admin.exe" size="31744">
       <assemblyIdentity name="PMSUpload_Admin" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>4Ol9vF0g2EVfm8WzuqPcBQb0eZCYIEPXgDr9+LpUPi8=</dsig:DigestValue>
+        <dsig:DigestValue>Puxu5uoDxCbU7GrIfN900y0svox8Y1KUxlPTYLmosw8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

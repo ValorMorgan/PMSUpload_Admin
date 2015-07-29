@@ -244,16 +244,16 @@ namespace PMSUpload_Admin
                 Console.WriteLine("true");
 
                 // Confirm that there is new data (if NOT new data)
-                Console.Write("...IsNewData: ");
-                if (!MainWindowHelper.IsNewData(parameters))
-                {
-                    Console.WriteLine("false");
-                    throw new Exception("No new data was entered.");
-                }
-                Console.WriteLine("true");
+                //Console.Write("...IsNewData: ");
+                //if (!MainWindowHelper.IsNewData(parameters))
+                //{
+                //    Console.WriteLine("false");
+                //    throw new Exception("No new data was entered.");
+                //}
+                //Console.WriteLine("true");
 
                 // Prompt user as a double-check
-                if (DialogResult.No == MessageBox.Show("Are you sure you want to save?", "Are you sure?", MessageBoxButtons.YesNo))
+                if (DialogResult.No == MessageBox.Show("Transaction will be saved and re-uploaded to the mainframe." + Environment.NewLine + "Do you wish to continue?", "Continue?", MessageBoxButtons.YesNo))
                 {
                     Console.WriteLine("...Canceled by user");
                     return;
@@ -264,7 +264,6 @@ namespace PMSUpload_Admin
 
                 ApplicationHelper.SaveClaim(parameters);
 
-                MessageBox.Show("Claim was successfully saved!", "Save successful");
                 Console.WriteLine("...Done");
             }
             catch (Exception ex)
@@ -276,7 +275,8 @@ namespace PMSUpload_Admin
             }
             finally
             {
-                this.Enabled = true;
+                // Close EditWindow when done
+                this.Dispose();
             }
         }
         #endregion
